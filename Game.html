@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Game.css">
+    <title>Webpage with Menu</title>
+</head>
+<body>
+    <header>
+        <button id="menuButton" class="menu-btn" onclick="toggleMenu()">...</button>
+    </header>
+    <div class="menu" id="menu">
+        <button class="close-btn" onclick="toggleMenu()">Exit [X]</button>
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('about')">About</a>
+        <a href="#" onclick="showPage('game1')">Country Match🇹🇷🇪🇦🇺🇲🇮🇳🇧🇷🇷🇺</a>
+        <a href="#" onclick="showPage('game2')">Chess♟️</a>
+        <a href="#" onclick="showPage('game3')">Game 3</a>
+        <a href="#" onclick="showPage('game4')">Game 4</a>
+        <a href="#" onclick="showPage('game5')">Game 5</a>
+    </div>
+
+    <main>
+        <section id="home" class="page">Welcome to the Homepage!</section>
+        <section id="about" class="page">About Us: Learn more about our mission and vision.<br>We offer you a wide range of games.</section>
+
+        <section id="game1" class="page">
+            <font face="serif" size="5" color="black"><marquee>Match The Countries</marquee></font>
+            <div id="score-board">Score: 0</div>
+            <div class="game-container">
+                <div class="card" data-framework="spain"></div>
+                <div class="card" data-framework="india"></div>
+                <div class="card" data-framework="brazil"></div>
+                <div class="card" data-framework="US"></div>
+                <div class="card" data-framework="russia"></div>
+                <div class="card" data-framework="india"></div>
+                <div class="card" data-framework="russia"></div>
+                <div class="card" data-framework="turkey"></div>
+                <div class="card" data-framework="turkey"></div>
+                <div class="card" data-framework="US"></div>
+                <div class="card" data-framework="spain"></div>
+                <div class="card" data-framework="brazil"></div>
+            </div>
+            <button id="restart-btn" class="hidden">Restart Game</button>
+            <font face="serif" size="2" color="blue"><marquee>©2024 All Rights Reserved</marquee></font>
+        </section>
+
+        <section id="game2" class="page">
+        <h1 id="♟️">CHESS <br> created by parrot. Find original at:https://sololearn.com/compiler-playground/WYd6M8hmGWp9/?ref=app</h1>
+      <div id="container"></div>
+        </section>
+
+        <section id="game3" class="page">
+<div class="game-container">
+  <div class="score-box" onclick="increaseScore()">
+    <span id="click-me">Click Me!</span>
+  </div>
+  <div class="timer-container">
+    <span id="timer">Time: <span id="time-left">--</span></span>
+    <button onclick="setTimeLimit(10)">10s</button>
+    <button onclick="setTimeLimit(20)">20s</button>
+    <button onclick="setTimeLimit(30)">30s</button>
+    <button onclick="setTimeLimit(50)">50s</button>
+    <button onclick="setTimeLimit(60)">60s</button>
+    <button id="restart-button" onclick="restartGame()">Restart</button>
+  </div>
+  <div class="score-container">
+    <span id="score">Score: 0</span>
+  </div>
+</div>
+<style>
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-box {
+  width: 200px;
+  height: 100px;
+  background-color: gray;
+  border: 2px solid transparent;
+  border-image: linear-gradient(to right, #f00, #0f0, #00f);
+  border-image-slice: 1;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.timer-container {
+  margin-top: 20px;
+  background-color:DodgerBlue;
+}
+
+#restart-button {
+  display: none;
+  background-color:crimson;
+}
+</style>
+
+<script>
+let score = 0;
+let timeLimit = 0;
+let timerInterval = null;
+
+function increaseScore() {
+  score++;
+  document.getElementById("score").textContent = `Score: ${score}`;
+}
+
+function setTimeLimit(time) {
+  timeLimit = time;
+  document.getElementById("time-left").textContent = time;
+  startTimer();
+}
+
+function startTimer() {
+  let timeLeft = timeLimit;
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    document.getElementById("time-left").textContent = timeLeft;
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
+}
+
+function endGame() {
+  clearInterval(timerInterval);
+  document.getElementById("click-me").textContent = "Time's Up!";
+  document.getElementById("restart-button").style.display = "block";
+}
+
+function restartGame() {
+  score = 0;
+  document.getElementById("score").textContent = `Score: ${score}`;
+  document.getElementById("click-me").textContent = "Click Me!";
+  document.getElementById("restart-button").style.display = "none";
+  setTimeLimit(timeLimit);
+}
+</script>
+</section>
+        <section id="game4" class="page">Welcome to Game 4.</section>
+        <section id="game5" class="page">Welcome to Game 5.</section>
+    </main>
+
+    <script src="Game.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            const scoreBoard = document.getElementById('score-board');
+            const restartBtn = document.getElementById('restart-btn');
+            
+            let hasFlippedCard = false;
+            let firstCard, secondCard;
+            let lockBoard = false;
+            let score = 0;
+            let matches = 0;
+
+            function flipCard() {
+                if (lockBoard) return;
+                if (this === firstCard) return;
+
+                this.classList.add('flipped');
+
+                if (!hasFlippedCard) {
+                    // flipCard one
+                    hasFlippedCard = true;
+                    firstCard = this;
+                    return;
+                }
+
+                // flipCard two
+                secondCard = this;
+
+                checkForMatch();
+            }
+
+            function checkForMatch() {
+                let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
+
+                isMatch ? disableCards() : unflipCards();
+            }
+
+            function disableCards() {
+                firstCard.removeEventListener('click', flipCard);
+                secondCard.removeEventListener('click', flipCard);
+
+                score += 15;
+                matches++;
+                updateScore();
+
+                resetBoard();
+
+                if (matches === cards.length / 2) {
+                    setTimeout(() => alert('You Won!'), 500);
+                    restartBtn.style.display = 'block';
+                }
+            }
+
+            function unflipCards() {
+                lockBoard = true;
+
+                setTimeout(() => {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+
+                    resetBoard();
+                }, 1500);
+            }
+
+            function resetBoard() {
+                [hasFlippedCard, lockBoard] = [false, false];
+                [firstCard, secondCard] = [null, null];
+            }
+
+            function updateScore() {
+                scoreBoard.textContent = `Score: ${score}`;
+            }
+
+            function shuffleCards() {
+                cards.forEach(card => {
+                    let randomPos = Math.floor(Math.random() * 8);
+                    card.style.order = randomPos;
+                });
+            }
+
+            function restartGame() {
+                score = 0;
+                matches = 0;
+                updateScore();
+                restartBtn.style.display = 'none';
+                cards.forEach(card => {
+                    card.classList.remove('flipped');
+                    card.addEventListener('click', flipCard);
+                });
+                shuffleCards();
+                restartBtn.classList.add('hidden');
+            }
+
+            (function shuffle() {
+                shuffleCards();
+            })();
+
+            cards.forEach(card => card.addEventListener('click', flipCard));
+            restartBtn.addEventListener('click', restartGame);
+        });
+
+        let user_answer = prompt("How many stars can you give us⭐?", 5);
+        if (user_answer === "5" || user_answer === "★★★★★" || user_answer === "five" || user_answer === "⭐⭐⭐⭐⭐" || user_answer === "over five" || user_answer > 5) {
+            alert("Thanks for your feedback❤️!")
+        } 
+        alert ("Enjoy your time")
+    </script>
+    <script>
+window.onload = function(){
+    var w = window.innerWidth || 360;
+    var h = window.innerHeight || 500;
+    
+    var tsw = (w > h) ? h : w;
+    
+    var sw = (tsw - 16)/8;
+    
+    var container = document.getElementById("container");
+    for(var n = 0; n < 64; n++){
+        var square = document.createElement("div");
+        square.classList.add("square");
+        square.classList.add("s"+n);
+        square.style.height = sw + 'px';
+        square.style.width = sw + 'px';
+        square.style.top = 7+(h-tsw)/4+sw*(Math.floor(n/8)) + 'px';
+        square.style.left = 7+(w-tsw)/2+sw*(Math.floor(n%8)) + 'px';
+        square.style.fontSize = sw*3/4 + 'px';
+        container.appendChild(square);
+    }
+
+    var fonts = {
+        'k' : '&#9818;',
+        'q' : '&#9819;',
+        'r' : '&#9820',
+        'b' : '&#9821',
+        'n' : '&#9822',
+        'p' : '&#9823',
+        'l' : '&#9812;',
+        'w' : '&#9813;',
+        't' : '&#9814',
+        'v' : '&#9815',
+        'm' : '&#9816',
+        'o' : '&#9817',
+        
+    }
+    
+    var values = ['r','n','b','q','k','b','n','r','p','p','p','p','p','p','p','p',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'o','o','o','o','o','o','o','o','t','m','v','w','l','v','m','t'];
+    var ck = false;
+    var cr1 = false;
+    var cr2 = false;
+    var cl;
+    
+    var sqs = document.getElementsByClassName("square");
+
+    for(var n = 0; n < 64; n++){
+        if(values[n] !== 0){
+           sqs[n].innerHTML = fonts[values[n]];
+        }
+        sqs[n].addEventListener("click",check);
+    }
+    
+    function updateSquarecolor(){
+        for(var n = 0; n < 64; n++){
+            if(Math.floor(n/8)%2 === 0){
+                if(n%2 === 0){
+                    sqs[n].style.background = '#CD853F';
+                }
+                else {
+                    sqs[n].style.background = '#F5DEB3';
+                }
+            }
+            else {
+                if(n%2 === 1){
+                    sqs[n].style.background = '#CD853F';
+                }
+                else {
+                    sqs[n].style.background = '#F5DEB3';
+                }
+            }
+        }
+    }
+    
+    updateSquarecolor();
+
+    var moveable = false;
+    var moveTarget = "";
+    var moveScopes = [];
+
+
+    function checkBlack(n,values){
+        var target = values[n];
+        var scopes = [];
+        var x = n;
+       
+        if(target === "o"){
+            x -= 8;
+            if("prnbkq".indexOf(values[x-1]) >= 0 && x%8 != 0){
+                scopes.push(x-1);
+            }
+            if("prnbkq".indexOf(values[x+1]) >= 0 && x%8 != 7){
+                scopes.push(x+1);
+            }
+            if(x >= 0 && values[x] === 0){
+                scopes.push(x);
+                if(x >= 40){
+                    if(x-8 >= 0 && values[x-8] === 0){
+                        scopes.push(x-8);
+                    }
+                }
+            }
+        }
+       
+        else if(target === "t"){
+            x = n;
+            x -= 8;
+            while(x >= 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 8;
+            }
+            x = n;
+            x += 8;
+            while(x < 64){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 8;
+            }
+            x = n;
+            x++;
+            while(x%8 != 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x++;
+            }
+            x = n;
+            x--;
+            while(x%8 != 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x--;
+            }
+        }
+        
+        else if(target === "m"){
+            x = n;
+            if(x%8 > 1 && x%8 < 6){
+                x -= 17;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x -= 15;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values [x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+
+                x = n;
+                x -= 10;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x -= 6;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 6;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 10;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 15;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 17;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+            }
+            else {
+                x = n;
+                if(x%8 <= 1){
+                    x = n;
+                    x -= 15;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x -= 6;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 10;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 17;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                }
+                x = n;
+                if(x%8 === 1){
+                    x -= 17;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 15;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                }
+                if(x%8 >= 6){
+                    x = n;
+                    x -= 17;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x -= 10;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 6;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 15;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                }
+                x = n;
+                if(x%8 === 6){
+                    x = n;
+                    x -= 15;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 17;
+                    if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                }
+            }
+        }
+        
+        else if(target === "v"){
+            x = n;
+            x -= 9;
+            while(x >= 0 && x%8 !== 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 9;
+            }
+            x = n;
+            x += 7;
+            while(x < 64 && x%8 !== 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 7;
+            }
+            x = n;
+            x += 9;
+            while(x%8 != 0 && x%8 !== 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 9;
+            }
+            x = n;
+            x -= 7;
+            while(x%8 != 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 7;
+            }
+        }
+       
+        else if(target === "w"){
+            x = n;
+            x -= 8;
+            while(x >= 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 8;
+            }
+            x = n;
+            x += 8;
+            while(x < 64){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 8;
+            }
+            x = n;
+            x++;
+            while(x%8 != 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x++;
+            }
+            x = n;
+            x--;
+            while(x%8 != 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x--;
+            }
+            x = n;
+            x -= 9;
+            while(x >= 0 && x%8 !== 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 9;
+            }
+            x = n;
+            x += 7;
+            while(x < 64 && x%8 !== 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 7;
+            }
+            x = n;
+            x += 9;
+            while(x%8 != 0 && x%8 !== 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 9;
+            }
+            x = n;
+            x -= 7;
+            while(x%8 != 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("prnbqk".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 7;
+            }
+        }
+        
+        else if(target === "l"){
+            x = n;
+            x += 8;
+            if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                scopes.push(x);
+            }
+            x = n;
+            x -= 8;
+            if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                scopes.push(x);
+            }
+            x = n;
+            if(x%8 > 0){
+                x = n;
+                x -= 1;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x -= 9;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+
+                x = n;
+                x += 7;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+            }
+            x = n;
+            if(x%8 < 7){
+                x = n;
+                x += 1;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 9;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x -= 7;
+                if(("prnbqk".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+            }
+            x = n;
+            if(!ck){
+                cl = false;
+                if(!cr2){
+                //    cl = false;
+                    if(values[n+1] === 0 && values[n+2] === 0 && values[n+3] === "t"){
+                        scopes.push(x+2);
+                        cl = true;
+                    }
+                }
+                if(!cr1){
+                //    cl = false;
+                    if(values[n-1] === 0 && values[n-2] === 0 && values[n-3] === 0 && values[n-4] === "t"){
+                        scopes.push(x-2);
+                        cl = true;
+                    }
+                }
+            }
+        }
+        if(scopes.length) return scopes;
+    }
+
+    function checkWhite(n,values){
+        var target = values[n];
+        var scopes = [];
+        var x = n;
+        if(target === "p"){
+            x += 8;
+            if("otmvlw".indexOf(values[x-1]) >= 0 && x%8 != 0){
+                scopes.push(x-1);
+            }
+            if("otmvlw".indexOf(values[x+1]) >= 0 && x%8 != 7){
+                scopes.push(x+1);
+            }
+            if(x < 64 && values[x] === 0){
+                scopes.push(x);
+                if(x <= 23){
+                    if(x+8 >= 0 && values[x+8] === 0){
+                        scopes.push(x+8);
+                    }
+                }
+            }
+        }
+        
+        else if(target === "r"){
+            x = n;
+            x -= 8;
+            while(x >= 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 8;
+            }
+            x = n;
+            x += 8;
+            while(x < 64){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 8;
+            }
+            x = n;
+            x++;
+            while(x%8 != 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x++;
+            }
+            x = n;
+            x--;
+            while(x%8 != 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x--;
+            }
+        }
+        
+        else if(target === "n"){
+            x = n;
+            if(x%8 > 1 && x%8 < 6){
+                x -= 17;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x -= 15;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+
+                x = n;
+                x -= 10;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x -= 6;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 6;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 10;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 15;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 17;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+            }
+            else {
+                x = n;
+                if(x%8 <= 1){
+                    x = n;
+                    x -= 15;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x -= 6;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 10;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 17;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                }
+                x = n;
+                if(x%8 === 1){
+                    x -= 17;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 15;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                }
+                if(x%8 >= 6){
+                    x = n;
+                    x -= 17;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x -= 10;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 6;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 15;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                }
+                x = n;
+                if(x%8 === 6){
+                    x = n;
+                    x -= 15;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                    x = n;
+                    x += 17;
+                    if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                        scopes.push(x);
+                    }
+                }
+            }
+        }
+     
+        else if(target === "b"){
+            x = n;
+            x -= 9;
+            while(x >= 0 && x%8 !== 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 9;
+            }
+            x = n;
+            x += 7;
+            while(x < 64 && x%8 !== 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 7;
+            }
+            x = n;
+            x += 9;
+            while(x%8 != 0 && x%8 !== 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 9;
+            }
+            x = n;
+            x -= 7;
+            while(x%8 != 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 7;
+            }
+        }
+        
+        else if(target === "q"){
+            x = n;
+            x -= 8;
+            while(x >= 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 8;
+            }
+            x = n;
+            x += 8;
+            while(x < 64){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 8;
+            }
+            x = n;
+            x++;
+            while(x%8 != 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x++;
+            }
+            x = n;
+            x--;
+            while(x%8 != 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x--;
+            }
+            x = n;
+            x -= 9;
+            while(x >= 0 && x%8 !== 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 9;
+            }
+            x = n;
+            x += 7;
+            while(x < 64 && x%8 !== 7){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 7;
+            }
+            x = n;
+            x += 9;
+            while(x%8 != 0 && x%8 !== 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x += 9;
+            }
+            x = n;
+            x -= 7;
+            while(x%8 != 0){
+                if(values[x] === 0){
+                    scopes.push(x);
+                }
+                else if("otmvlw".indexOf(values[x]) >= 0){
+                    scopes.push(x);
+                    break;
+                }
+                else {
+                    break;
+                }
+                x -= 7;
+            }
+        }
+        
+        else if(target === "k"){
+            x = n;
+            x += 8;
+            if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                scopes.push(x);
+            }
+            x = n;
+            x -= 8;
+            if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                scopes.push(x);
+            }
+            x = n;
+            if(x%8 > 0){
+                x = n;
+                x -= 1;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x -= 9;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+
+                x = n;
+                x += 7;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+            }
+            x = n;
+            if(x%8 < 7){
+                x = n;
+                x += 1;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x += 9;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+                x = n;
+                x -= 7;
+                if(("otmvlw".indexOf(values[x]) >= 0 || values[x] === 0) && x < 64 && x >= 0){
+                    scopes.push(x);
+                }
+            }
+        }
+        if(scopes.length) return scopes;
+    }
+
+    var myTurn = true;
+
+    function check(){
+        if(myTurn){
+            var n = Number(this.classList[1].slice(1));
+            var target = values[n];
+
+            var scopes = checkBlack(n,values) || [];
+
+            var x = n;
+
+            if(!moveable){
+                if(scopes.length > 0){
+                    moveable = true;
+                    moveTarget = n;
+                    moveScopes = scopes.join(",").split(",");
+                }
+                else {
+
+                }
+            }
+            else {
+                if(moveScopes.indexOf(String(n)) >= 0){
+                    var checkArr = [];
+                    var saveKing = false;
+                    for(var z = 0; z < 64; z++){
+                        checkArr[z] = values[z];
+                    }
+                    
+                    checkArr[n] = checkArr[moveTarget];
+                    checkArr[moveTarget] = 0;
+                    
+                    for(var y = 0; y < 64; y++){
+                        if("prnbkq".indexOf(checkArr[y]) >= 0){
+                            var checkScp = checkWhite(y,checkArr) || [];
+                            for(var z = 0; z < checkScp.length; z++){
+                                if(checkArr[checkScp[z]] === 'l'){
+                                    if(!saveKing){
+                                        alert('Save your KING or else >:), Ill k!ll him >:D');
+                                        saveKing = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if(!saveKing){
+                        values[n] = values[moveTarget];
+                        values[moveTarget] = 0;
+                        if(cl){
+                            if(n === 62 && moveTarget === 60){
+                                values[63] = 0;
+                                values[61] = "t";
+                            }
+                            else if(n === 58 && moveTarget === 60){
+                                values[59] = "t";
+                                values[56] = 0;
+                            }
+                        }
+                        if(moveTarget === 60){
+                            ck = true;
+                        }
+                        else if(moveTarget === 63){
+                            cr2 = true;
+                        }
+                        else if(moveTarget === 56){
+                            cr1 = true;
+                        }
+                        if(values[n] === "o" && n < 8){
+                            values[n] = "w";
+                        }
+                        moveable = false;
+                        scopes = [];
+                        myTurn = false;
+                        setTimeout(chooseTurn,1000);
+                    }
+                }
+                else {
+                    moveScopes = [];
+                    moveable = false;
+                }
+            }
+
+            updateSquarecolor();
+            
+            for(var x = 0; x < 64; x++){
+                sqs[x].innerHTML = fonts[values[x]];
+                if(values[x] === 0){
+                    sqs[x].innerHTML = "";
+                }
+            }
+
+            for(var x = 0; x < scopes.length; x++){
+                sqs[scopes[x]].style.background = 
+"mediumspringgreen";//.classList.add("scope");
+            //    alert(scopes)
+            }
+        }
+    }
+
+
+    var arr = [];
+
+    function chooseTurn(){
+        var approved = [];
+        var actions = [];
+        var effects = [];
+
+
+        for(var n = 0; n < 64; n++){
+            if("prnbqk".indexOf(values[n]) >= 0){
+                var scopes = checkWhite(n,values) || [];
+                for(var x = 0; x < scopes.length; x++){
+                    var tmp = []//values.join(',').split(',');
+                    for(var xx = 0; xx < 64; xx++){
+                        tmp[xx] = values[xx]
+                    }
+                    var effect = 0;
+                    var action = Math.random()*3;
+                    //Action value
+                    var actionValue = tmp[scopes[x]];
+                    if(actionValue === "l"){
+                        action = 100 + Math.random()*3;
+                    }
+                    else if(actionValue === "w"){
+                        action = 50 + Math.random()*3;
+                    }
+                    else if(actionValue === "v"){
+                        action = 30 + Math.random()*3;
+                    }
+                    else if(actionValue === "m"){
+                        action = 30 + Math.random()*3;
+                    }
+                    else if(actionValue === "t"){
+                        action = 30 + Math.random()*3;
+                    }
+                    else if(actionValue === "o"){
+                        action = 15 + Math.random()*3;
+                    }
+                    //Effect value
+                    tmp[scopes[x]] = tmp[n];
+                    tmp[n] = 0;
+                    for(var y = 0; y < 64; y++){
+                        if("otmvlw".indexOf(values[y]) >= 0){
+                            var tmpScp = checkBlack(y,tmp) || [];
+                            for(var z = 0; z < tmpScp.length; z++){
+                                var effectValue = tmp[tmpScp[z]];
+                                if(effectValue == "k"){
+                                    if(effect < 100){
+                                        effect = 100;
+                                    }
+                                }
+                                else if(effectValue == "q"){
+                                    if(effect < 50){
+                                        effect = 50;
+                                    }
+                                }
+                                else if(effectValue == "b"){
+                                    if(effect < 30){
+                                        effect = 30;
+                                    }
+                                }
+                                else if(effectValue == "n"){
+                                    if(effect < 30){
+                                        effect = 30;
+                                    }
+                                }
+                                else if(effectValue == "r"){
+                                    if(effect < 30){
+                                        effect = 30;
+                                    }
+                                }
+                                else if(effectValue == "p"){
+                                    if(effect < 15){
+                                        effect = 15;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+
+
+                    actions.push(action);
+                    effects.push(effect);
+                    approved.push(n+"-"+scopes[x]);
+                }
+            }
+        }
+
+        //alert(actions);
+
+        var bestEffect = Math.min.apply(null,effects);
+        //alert(bestEffect);
+        if(bestEffect >= 100){
+            alert("You win, how?🥺");
+            setTimeout(function(){
+                values = ['r','n','b','q','k','b','n','r','p','p','p','p','p','p','p','p',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'o','o','o','o','o','o','o','o','t','m','v','w','l','v','m','t'];
+        },100);
+        }
+
+        var tmpA = [];
+        var tmpB = [];
+        var tmpC = [];
+        var bestMove = "";
+
+        for(var n = 0; n < effects.length; n++){
+            if(effects[n] === bestEffect){
+                tmpA.push(actions[n]);
+                tmpB.push(approved[n]);
+                tmpC.push(effects[n]);
+            }
+        }
+        bestMove = tmpB[tmpA.indexOf(Math.max.apply(null,tmpA))];
+    //    alert(effects)
+        //alert(bestMove);
+
+
+        if(bestMove){
+            values[Number(bestMove.split("-")[1])] = values[Number(bestMove.split("-")[0])];
+            values[Number(bestMove.split("-")[0])] = 0;
+            if(values[Number(bestMove.split("-")[1])] === "p" && Number(bestMove.split("-")[1]) >= 56){
+                values[Number(bestMove.split("-")[1])] = "q";
+            }
+
+            sqs[bestMove.split("-")[1]].style.background = '#20B2AA';
+            sqs[bestMove.split("-")[0]].style.background = '#20B2AA';
+
+            for(var x = 0; x < 64; x++){
+                //sqs[x].style.background = "#afa"//classList.add("scope");
+                sqs[x].innerHTML = fonts[values[x]];
+                if(values[x] === 0){
+                    sqs[x].innerHTML = "";
+                }
+            }
+            myTurn = true;
+        }
+        else {
+            //alert('You win, how??🥺');
+        }
+    }
+}
+//chooseTurn(); 
+    </script>
+</body>
+</html>
